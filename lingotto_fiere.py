@@ -23,23 +23,32 @@ class LingottoFiere:
     def carica_file_dati(self, file_path):
         """Carica i dati (stand ed espositori) dal file"""
         file = open(file_path, "r", encoding="utf-8")
-        lettore = csv.reader(file)
+        reader = csv.reader(file)
 
-        for riga in lettore:
-            if not riga:
-                continue
+        for campi in reader:
+            codice = campi[0]
 
-            codice = riga[0]
             if codice.startswith("ES"):
-                self.__espositori[codice] = Espositore(codice, riga[1], riga[2])
+                nome = campi[1]
+                cognome = campi[2]
+                nuovo_esp = Espositore(codice, nome, cognome)
+                self.__espositori[codice] = nuovo_esp
+
             elif codice.startswith("ST"):
-                if len(riga) == 4 or riga[4] == "":
-                    self.__stand[codice] = Stand(codice, riga[1], riga[2], riga[3])
-                # .isdigit() controlla se il quinto campo è composto da cifre numeriche
-                elif riga[4].isdigit():
-                    self.__stand[codice] = StandPreseExtra(codice, riga[1], riga[2], riga[3], riga[4])
+                sup = campi[1]
+                pad = campi[2]
+                prezzo = campi[3]
+
+                if len(campi) == 4:
+                    nuovo_stand = Stand(codice, sup, pad, prezzo)
+                elif campi[4].isdigit():
+                    prese = campi[4]
+                    nuovo_stand = StandPreseExtra(codice, sup, pad, prezzo, prese)
                 else:
-                    self.__stand[codice] = StandPremium(codice, riga[1], riga[2], riga[3], riga[4])
+                    pos = campi[4]
+                    nuovo_stand = StandPremium(codice, sup, pad, prezzo, pos)
+
+                self.__stand[codice] = nuovo_stand
 
         file.close()
 

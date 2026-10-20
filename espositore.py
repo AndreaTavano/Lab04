@@ -10,14 +10,6 @@ class Espositore:
         return self.__codice
 
     @property
-    def nome(self):
-        return self.__nome
-
-    @property
-    def cognome(self):
-        return self.__cognome
-
-    @property
     def stand(self):
         return self.__stand
 

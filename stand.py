@@ -28,25 +28,27 @@ class Stand:
         return self.__disponibile
 
     @disponibile.setter
-    def disponibile(self, stato):
-        self.__disponibile = stato
+    def disponibile(self, valore):
+        self.__disponibile = valore
 
     @property
     def espositore(self):
         return self.__espositore
 
     @espositore.setter
-    def espositore(self, nuovo_espositore):
-        self.__espositore = nuovo_espositore
+    def espositore(self, esp):
+        self.__espositore = esp
 
     @property
     def prezzo(self):
         return self.__prezzo_base
 
     def __str__(self):
-        stato = "Disponibile" if self.__disponibile else f"Occupato ({self.__espositore.codice})"
+        if self.__disponibile:
+            stato = "Disponibile"
+        else:
+            stato = "Non disponibile"
         return f"{self.__codice}: Standard | {self.__superficie} mq - Padiglione {self.__padiglione} - Prezzo {self.prezzo:.2f}€ - {stato}"
-
 
 class StandPreseExtra(Stand):
     def __init__(self, codice, superficie, padiglione, prezzo_base, numero_prese):
@@ -54,17 +56,15 @@ class StandPreseExtra(Stand):
         self.__numero_prese = int(numero_prese)
 
     @property
-    def numero_prese(self):
-        return self.__numero_prese
-
-    @property
     def prezzo(self):
         return self.prezzo_base * (1 + 0.07 * self.__numero_prese)
 
     def __str__(self):
-        stato = "Disponibile" if self.disponibile else f"Occupato ({self.espositore.codice})"
+        if self.disponibile:
+            stato = "Disponibile"
+        else:
+            stato = "Non disponibile"
         return f"{self.codice}: Prese Extra | {self.superficie} mq - Padiglione {self.padiglione} - Prezzo {self.prezzo:.2f}€ - Prese aggiuntive: {self.__numero_prese} - {stato}"
-
 
 class StandPremium(Stand):
     def __init__(self, codice, superficie, padiglione, prezzo_base, posizione):
@@ -72,13 +72,12 @@ class StandPremium(Stand):
         self.__posizione = posizione
 
     @property
-    def posizione(self):
-        return self.__posizione
-
-    @property
     def prezzo(self):
         return self.prezzo_base * 1.30
 
     def __str__(self):
-        stato = "Disponibile" if self.disponibile else f"Occupato ({self.espositore.codice})"
+        if self.disponibile:
+            stato = "Disponibile"
+        else:
+            stato = "Non disponibile"
         return f"{self.codice}: Premium | {self.superficie} mq - Padiglione {self.padiglione} - Prezzo {self.prezzo:.2f}€ - Posizione: {self.__posizione} - {stato}"
